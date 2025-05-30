@@ -72,6 +72,11 @@ public class PlayerControl : MonoBehaviour
             isHidden = true;
             playerRenderer.enabled = false;
         }
+        if (other.CompareTag("Finish"))
+        {
+            Debug.Log("탈출!");
+            //다음 스테이지로 진행
+        }
     }
 
     private void OnTriggerExit2D(Collider2D other)
