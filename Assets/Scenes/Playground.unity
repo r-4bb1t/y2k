@@ -12027,6 +12027,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeDuration: 1
+--- !u!95 &779371782
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 779371770}
+  m_Enabled: 0
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c59fc8ae190b73242b672f99091f3fa5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!4 &1095006898 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1492465748861140562, guid: 5ecf94c3e2556ce43b04ecd0b252ad5f, type: 3}
@@ -15177,6 +15198,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 779371770}
     - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f, type: 3}
+      propertyPath: spawnInterval
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f, type: 3}
       propertyPath: baseZombiePrefab
       value: 
       objectReference: {fileID: 779371770}
@@ -15201,6 +15226,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f, type: 3}
+      propertyPath: timeToSpawnRandomZombies
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f, type: 3}
       propertyPath: chargingZombieSpawnChance
       value: 0.2
       objectReference: {fileID: 0}
@@ -15220,6 +15249,10 @@ PrefabInstance:
       propertyPath: spawnPoints.Array.data[3]
       value: 
       objectReference: {fileID: 1438066003}
+    - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f, type: 3}
+      propertyPath: timeToSpawnChargingZombies
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15236,6 +15269,18 @@ PrefabInstance:
     - target: {fileID: 380557119895556729, guid: 9a25a35fc6464ce41888542b0819c014, type: 3}
       propertyPath: m_Color.a
       value: 0.56078434
+      objectReference: {fileID: 0}
+    - target: {fileID: 380557119895556729, guid: 9a25a35fc6464ce41888542b0819c014, type: 3}
+      propertyPath: m_Color.b
+      value: 0.5176471
+      objectReference: {fileID: 0}
+    - target: {fileID: 380557119895556729, guid: 9a25a35fc6464ce41888542b0819c014, type: 3}
+      propertyPath: m_Color.g
+      value: 0.15588483
+      objectReference: {fileID: 0}
+    - target: {fileID: 380557119895556729, guid: 9a25a35fc6464ce41888542b0819c014, type: 3}
+      propertyPath: m_Color.r
+      value: 0.12941177
       objectReference: {fileID: 0}
     - target: {fileID: 2454094244353490752, guid: 9a25a35fc6464ce41888542b0819c014, type: 3}
       propertyPath: m_Name
@@ -15304,6 +15349,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2454094244353490752, guid: 9a25a35fc6464ce41888542b0819c014, type: 3}
       insertIndex: -1
       addedObject: {fileID: 779371776}
+    - targetCorrespondingSourceObject: {fileID: 2454094244353490752, guid: 9a25a35fc6464ce41888542b0819c014, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 779371782}
   m_SourcePrefab: {fileID: 100100000, guid: 9a25a35fc6464ce41888542b0819c014, type: 3}
 --- !u!1001 &6510595212429014409
 PrefabInstance:
