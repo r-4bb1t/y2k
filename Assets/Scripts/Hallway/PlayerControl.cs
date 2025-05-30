@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerControl : MonoBehaviour
 {
     public float moveSpeed = 5f;
+    float horizontalInput;
+    float verticalInput;
 
     Vector2 moveDir = Vector2.zero;
 
@@ -18,23 +20,11 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
-        {
-            moveDir = new Vector2(0, 1f);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            moveDir = new Vector2(-1f, 0);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            moveDir = new Vector2(0, -1f);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            moveDir = new Vector2(1f, 0);
-        }
+        horizontalInput = Input.GetAxisRaw("Horizontal");
+        verticalInput = Input.GetAxisRaw("Vertical");
 
-        playerRB.velocity = moveDir.normalized * moveSpeed;
+        moveDir = new Vector2(horizontalInput, verticalInput).normalized; 
+
+        playerRB.velocity = moveDir * moveSpeed;
     }
 }
