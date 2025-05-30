@@ -4,6 +4,8 @@ using UnityEngine;
 public class Teacher : MonoBehaviour
 {
     public bool isWatching = false;
+    private Player player;
+
 
     private Animator animator;
 
@@ -16,6 +18,7 @@ public class Teacher : MonoBehaviour
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
+        player = FindObjectOfType<Player>();
         StartCoroutine(StateLoop());
     }
 
@@ -27,12 +30,19 @@ public class Teacher : MonoBehaviour
             isWatching = false;
             yield return new WaitForSeconds(Random.Range(minSleepTime, maxSleepTime));
 
+            if (player != null && player.isGameOver)
+                yield break;
+
             animator.SetInteger("status", 1);
             yield return new WaitForSeconds(warningTime);
+
+            if (player != null && player.isGameOver)
+                yield break;
 
             animator.SetInteger("status", 2);
             isWatching = true;
             yield return new WaitForSeconds(Random.Range(minWatchTime, maxWatchTime));
         }
     }
+
 }

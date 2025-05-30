@@ -8,7 +8,8 @@ public class Player : MonoBehaviour
     private float moveSpeed = 5f;
     private Rigidbody2D rb;
     private Teacher teacher;
-    private bool isGameOver = false;
+    public bool isGameOver { get; private set; } = false;
+
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
