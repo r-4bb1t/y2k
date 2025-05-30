@@ -109,33 +109,45 @@ public class ChargingZombieAI : MonoBehaviour
                 }
                 break;
 
-            case State.PreparingCharge:
-                prepareTimer -= Time.deltaTime;
-                Vector2 directionToPlayerWhilePreparing = (player.position - transform.position).normalized; // 준비 중에도 계속 플레이어 조준
+            // ChargingZombieAI.cs의 Update() 함수 내 State.PreparingCharge 부분
 
-                // 돌진 방향 표시기 업데이트
-                if (chargeDirectionIndicator != null)
-                {
-                    chargeDirectionIndicator.SetActive(true);
-                    // 표시기 위치: 좀비 위치에서 (조준방향 * 돌진거리/2) 만큼 떨어진 곳 (표시기 길이의 중간점)
-                    chargeDirectionIndicator.transform.position = (Vector2)transform.position + (directionToPlayerWhilePreparing * chargeDistance * 0.5f);
-                    // 표시기 회전: 조준 방향으로
-                    chargeDirectionIndicator.transform.up = directionToPlayerWhilePreparing;
-                    // 표시기 길이(Y스케일)는 고정하고, 색상 알파값 등으로 준비 상태 표현 가능
-                    // 예: 표시기 Sprite Renderer의 Material을 사용하거나, Sprite 자체를 바꾸거나, Alpha값 변경
-                    if(indicatorRenderer != null)
-                    {
-                        // 준비 시간이 다 되어갈수록 진하게 (예시)
-                        float alpha = Mathf.Lerp(1f, 0.3f, prepareTimer / chargePreparationTime);
-                        indicatorRenderer.color = new Color(indicatorRenderer.color.r, indicatorRenderer.color.g, indicatorRenderer.color.b, alpha);
-                    }
-                }
+case State.PreparingCharge:
+    prepareTimer -= Time.deltaTime;
+    Vector2 directionToPlayerWhilePreparing = (player.position - transform.position).normalized;
 
-                if (prepareTimer <= 0f)
-                {
-                    StartCharge(directionToPlayerWhilePreparing); // 최종 조준 방향으로 돌진 시작
-                }
-                break;
+    if (chargeDirectionIndicator != null)
+    {
+        chargeDirectionIndicator.SetActive(true);
+
+        // 1. 표시기의 길이(Y 스케일)를 chargeDistance로 설정
+        //    (표시기 GameObject의 초기 X, Z 스케일은 유지)
+        chargeDirectionIndicator.transform.localScale = new Vector3(
+            chargeDirectionIndicator.transform.localScale.x, // 초기 설정한 X 스케일(두께) 유지
+            chargeDistance,                                  // Y 스케일을 돌진 거리로
+            chargeDirectionIndicator.transform.localScale.z  // 초기 설정한 Z 스케일 유지
+        );
+
+        // 2. 표시기의 위치 설정: 좀비 위치에서 (조준방향 * 돌진거리/2) 만큼 떨어진 곳 (표시기 길이의 중간점)
+        //    이렇게 하면 표시기의 중심이 돌진 경로의 중간에 위치하게 됩니다.
+        chargeDirectionIndicator.transform.position = (Vector2)transform.position + (directionToPlayerWhilePreparing * chargeDistance * 0.5f);
+        
+        // 3. 표시기 회전: 조준 방향으로 (Y축이 앞을 향하도록)
+        chargeDirectionIndicator.transform.up = directionToPlayerWhilePreparing;
+
+        // 4. (선택) 표시기 색상/알파값 등으로 준비 상태 표현
+        if(indicatorRenderer != null)
+        {
+            // 예: 준비 시간이 다 되어갈수록 불투명하게 (또는 특정 색으로 깜빡이게 등)
+            float alpha = Mathf.Lerp(1f, 0.3f, prepareTimer / chargePreparationTime); // 점점 진해지는 효과
+            indicatorRenderer.color = new Color(indicatorRenderer.color.r, indicatorRenderer.color.g, indicatorRenderer.color.b, alpha);
+        }
+    }
+
+    if (prepareTimer <= 0f)
+    {
+        StartCharge(directionToPlayerWhilePreparing);
+    }
+    break;
 
             case State.Charging:
                 // rb.velocity는 StartCharge에서 이미 설정됨
