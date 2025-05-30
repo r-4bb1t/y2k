@@ -4,22 +4,25 @@ using UnityEngine;
 
 public class Desk : MonoBehaviour
 {
+    private SpriteRenderer sr;
     void Start()
     {
-
-    }
-
-    void LateUpdate()
-    {
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        sr = GetComponentInChildren<SpriteRenderer>();
         if (sr != null)
         {
-            string[] deskSprites = { "Desk", "Desk2", "Desk3" };
+            string[] deskSprites = { "Sprites/Classroom/Desk", "Sprites/Classroom/Desk2", "Sprites/Classroom/Desk3" };
             string selectedSprite = deskSprites[Random.Range(0, deskSprites.Length)];
             sr.sprite = Resources.Load<Sprite>(selectedSprite);
-            sr.sortingOrder = 10 - (int)(transform.position.y);
         }
     }
+
+    // void LateUpdate()
+    // {
+    //     if (sr != null)
+    //     {
+    //         sr.sortingOrder = 10 - (int)(transform.position.y);
+    //     }
+    // }
     void Update()
     {
 
