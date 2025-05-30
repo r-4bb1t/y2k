@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     private float moveSpeed = 5f;
     private Rigidbody2D rb;
     private Teacher teacher;
+    private bool isGameOver = false;
 
     private Animator animator;
     private SpriteRenderer spriteRenderer;
@@ -20,13 +21,15 @@ public class Player : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
-
     void Update()
     {
+        if (isGameOver) return;
+
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
         Vector2 movement = new Vector2(moveX, moveY).normalized;
+        rb.velocity = movement * moveSpeed;
 
         if (animator != null)
         {
@@ -43,9 +46,9 @@ public class Player : MonoBehaviour
         {
             GameOver();
         }
-
-        rb.velocity = movement * moveSpeed;
     }
+
+
 
     bool IsHiddenBehindCover()
     {
@@ -55,14 +58,36 @@ public class Player : MonoBehaviour
 
     void GameOver()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (isGameOver) return;
+        isGameOver = true;
+
+        rb.velocity = Vector2.zero;
+        animator.SetBool("isMoving", false);
+
+        StartCoroutine(DelayedFadeOut());
     }
+
+    IEnumerator DelayedFadeOut()
+    {
+        yield return new WaitForSeconds(0.5f);
+        FadeManager.Instance.FadeOutAndReload();
+    }
+
+
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Door"))
         {
             GameClear();
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.sortingOrder = 10 - (int)(transform.position.y);
         }
     }
 

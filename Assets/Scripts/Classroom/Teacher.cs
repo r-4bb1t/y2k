@@ -25,16 +25,14 @@ public class Teacher : MonoBehaviour
         {
             animator.SetInteger("status", 0);
             isWatching = false;
-            float sleepTime = Random.Range(minSleepTime, maxSleepTime);
-            yield return new WaitForSeconds(sleepTime);
+            yield return new WaitForSeconds(Random.Range(minSleepTime, maxSleepTime));
 
             animator.SetInteger("status", 1);
             yield return new WaitForSeconds(warningTime);
 
             animator.SetInteger("status", 2);
             isWatching = true;
-            float watchTime = Random.Range(minWatchTime, maxWatchTime);
-            yield return new WaitForSeconds(watchTime);
+            yield return new WaitForSeconds(Random.Range(minWatchTime, maxWatchTime));
         }
     }
 }
