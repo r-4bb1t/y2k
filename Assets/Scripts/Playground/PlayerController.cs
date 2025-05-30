@@ -52,11 +52,11 @@ public class PlayerController : MonoBehaviour
             // 이동 벡터의 크기(길이)가 0.1보다 크면 움직이는 것으로 간주
             if (moveDirection.magnitude > 0.1f)
             {
-                animator.SetBool("IsWalking", true);
+                animator.SetBool("isMoving", true);
             }
             else
             {
-                animator.SetBool("IsWalking", false);
+                animator.SetBool("isMoving", false);
             }
         }
 
@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour
         if (!enabled) // 조작이 비활성화되면
         {
             if (rb != null) rb.velocity = Vector2.zero; // 물리적 움직임 정지
-            if (animator != null) animator.SetBool("IsWalking", false); // 애니메이션을 Idle 상태로
+            if (animator != null) animator.SetBool("isMoving", false); // 애니메이션을 Idle 상태로
         }
     }
 }
