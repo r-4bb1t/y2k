@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     private float spawnTimer;
     private float currentSurvivalTime;
     private bool isGameOver = false;
-    public bool isGameWon = false;
+    public bool isGameWon { get; private set; } = false;
     private Transform playerTransformForSpawning;
     // private bool isCutscenePlaying = true; // 컷신 사용 안 함
     private bool finalEscapeTriggered = false; // 최종 탈출(씬 로드)이 한 번만 실행되도록
@@ -94,18 +94,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // 게임 오버 상태일 때만 스페이스바로 재시작 (엔딩씬으로 넘어가면 이 GameManager는 파괴됨)
-        if (isGameOver)
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                RestartGame();
-            }
-            return;
-        }
-
-        // isCutscenePlaying 체크 제거
-
-        if (isGameWon || finalEscapeTriggered) // 60초 생존했거나 이미 탈출씬으로 넘어갔다면
+        if (isGameOver || isGameWon || finalEscapeTriggered) // 60초 생존했거나 이미 탈출씬으로 넘어갔다면
         {
             // 플레이어가 출구로 이동하기를 기다리거나, 이미 씬 전환됨.
             // 이 GameManager는 더 이상 게임 로직(타이머, 스폰)을 진행하지 않음.
@@ -190,9 +179,7 @@ public class GameManager : MonoBehaviour
     {
         if (isGameOver || isGameWon || finalEscapeTriggered) return;
         isGameOver = true;
-        Time.timeScale = 0f;
-        if (gameOverPanel != null) gameOverPanel.SetActive(true);
-        Debug.Log("게임 오버!");
+        SceneManager.LoadScene("GameOver");
     }
 
     // GameManager.cs
@@ -209,16 +196,16 @@ public class GameManager : MonoBehaviour
             doorSpriteRenderer.sprite = doorOpenSprite;
         }
 
-        // ★ 2. 문의 콜라이더 비활성화 ★
-        if (doorCollider != null)
-        {
-            doorCollider.enabled = false; // 콜라이더를 비활성화하여 통과 가능하게 만듦
-            Debug.Log("문 콜라이더가 비활성화되었습니다.");
-        }
-        else
-        {
-            Debug.LogWarning("GameManager: Door Collider가 연결되지 않았습니다.");
-        }
+        // // ★ 2. 문의 콜라이더 비활성화 ★
+        // if (doorCollider != null)
+        // {
+        //     doorCollider.enabled = false; // 콜라이더를 비활성화하여 통과 가능하게 만듦
+        //     Debug.Log("문 콜라이더가 비활성화되었습니다.");
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("GameManager: Door Collider가 연결되지 않았습니다.");
+        // }
 
         // 3. 모든 좀비 제거
         GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie"); // 좀비 태그 확인!
@@ -248,16 +235,7 @@ public class GameManager : MonoBehaviour
         // 새 씬을 로드하기 전에 Time.timeScale을 1로 되돌리는 것이 좋습니다.
         // 특히 엔딩 씬에 애니메이션이나 다른 시간 기반 요소가 있다면 더욱 그렇습니다.
         Time.timeScale = 1f;
-
-        if (string.IsNullOrEmpty(endingSceneName) || endingSceneName == "YourEndingSceneNameHere")
-        {
-            Debug.LogError("엔딩 씬 이름(endingSceneName)이 GameManager에 설정되지 않았습니다!");
-            // 엔딩 씬 이름이 없으면, 임시로 게임 오버 패널 같은 것을 보여주거나 아무것도 안 할 수 있습니다.
-            // 여기서는 간단히 로그만 남기고, 필요하다면 다른 UI(예: 임시 클리어 텍스트)를 띄웁니다.
-            if (timerText != null) timerText.text = "탈출 성공! (엔딩씬 설정 필요)";
-            return;
-        }
-        SceneManager.LoadScene(endingSceneName); // 엔딩 씬 로드
+        SceneManager.LoadScene("Ending"); // 엔딩 씬 로드
     }
 
     public void RestartGame()

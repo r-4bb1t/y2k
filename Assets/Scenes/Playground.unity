@@ -12742,7 +12742,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.05073577, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -12753,7 +12753,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 3.2323356, y: 1}
   m_EdgeRadius: 0
 --- !u!4 &1135935470
 Transform:
@@ -16947,6 +16947,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300158, guid: 29c9cded5e558164aaf8c9bf08aa1510,
         type: 3}
+    - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f,
+        type: 3}
+      propertyPath: survivalTimeGoal
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f,
         type: 3}
       propertyPath: doorSpriteRenderer
