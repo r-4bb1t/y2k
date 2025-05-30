@@ -17,9 +17,14 @@ public class EnemyControl : MonoBehaviour
     private bool isRotating = false;
     private Vector2 moveDirection;
 
+    public GameObject player;
+    PlayerControl playerControl;
+
     void Start()
     {
         moveDirection = transform.up; // 적이 바라보는 방향으로 초기화 (Y축 양의 방향)
+        player = GameObject.FindWithTag("Player").gameObject;
+        playerControl = player.GetComponent<PlayerControl>();
     }
 
     void Update() // LateUpdate 대신 Update에서 레이캐스트 수행
@@ -38,7 +43,11 @@ public class EnemyControl : MonoBehaviour
             if (hit && ((1 << hit.collider.gameObject.layer) & targetMask) != 0)
             {
                 Debug.Log("플레이어 감지됨!");
-                // 플레이어 isHidden == false || (isHidden == true && isPlayerMoving == true) 일 경우 게임 오버 로직
+                if (playerControl.isHidden == false || (playerControl.isHidden == true && playerControl.isPlayerMoving == true))
+                {
+                    //게임 오버 로직
+                    Debug.Log("게임 오버!");
+                }
             }
 
             // 디버그용 레이 (색상 변경)

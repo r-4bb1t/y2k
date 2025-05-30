@@ -16681,7 +16681,7 @@ Transform:
   m_GameObject: {fileID: 1799008623}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -2.02, y: -12.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16827,9 +16827,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f,
         type: 3}
+      propertyPath: doorOpenSprite
+      value: 
+      objectReference: {fileID: 21300160, guid: 29c9cded5e558164aaf8c9bf08aa1510,
+        type: 3}
+    - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f,
+        type: 3}
       propertyPath: baseZombiePrefab
       value: 
       objectReference: {fileID: 779371770}
+    - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f,
+        type: 3}
+      propertyPath: doorClosedSprite
+      value: 
+      objectReference: {fileID: 21300158, guid: 29c9cded5e558164aaf8c9bf08aa1510,
+        type: 3}
+    - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f,
+        type: 3}
+      propertyPath: doorSpriteRenderer
+      value: 
+      objectReference: {fileID: 854552695}
     - target: {fileID: 6076252035993169519, guid: fc6cf3c50c343744796e6f72861dba8f,
         type: 3}
       propertyPath: randomZombiePrefab
