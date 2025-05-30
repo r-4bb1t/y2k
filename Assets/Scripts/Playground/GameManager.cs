@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     [Header("Game Settings")]
     public float spawnInterval = 10f;
     public float survivalTimeGoal = 60f;
-    public float minSpawnDistanceToPlayer = 5f;
+    public float minSpawnDistanceToPlayer = 14f;
     public float timeToSpawnChargingZombies = 30f;
     [Range(0f, 1f)]
     public float chargingZombieSpawnChance = 0.1f;
