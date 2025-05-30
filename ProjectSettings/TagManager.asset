@@ -10,6 +10,7 @@ TagManager:
   - TurnRight
   - TurnLeft
   - TurnBack
+  - Door
   layers:
   - Default
   - TransparentFX

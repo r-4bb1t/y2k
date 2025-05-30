@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
             }
         }
 
-        if (teacher.isWatching && movement.magnitude > 0 && !IsHiddenBehindCover())
+        if (teacher.isWatching && !IsHiddenBehindCover())
         {
             GameOver();
         }
@@ -56,5 +56,18 @@ public class Player : MonoBehaviour
     void GameOver()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Door"))
+        {
+            GameClear();
+        }
+    }
+
+    void GameClear()
+    {
+        Debug.Log("게임 클리어!");
     }
 }
