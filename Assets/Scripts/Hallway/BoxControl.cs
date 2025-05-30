@@ -14,6 +14,11 @@ public class BoxControl : MonoBehaviour
         {
             transform.position = player.transform.position;
         }
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            isFollowingPlayer = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
