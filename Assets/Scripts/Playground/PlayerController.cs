@@ -1,4 +1,5 @@
 using UnityEngine;
+uusing UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,24 +9,29 @@ public class PlayerController : MonoBehaviour
     // 컴포넌트 참조 변수
     private Rigidbody2D rb;
     private Animator animator;
-    private SpriteRenderer spriteRenderer; // 좌우 반전을 위해 추가 (선택 사항)
+    private SpriteRenderer spriteRenderer;
 
     // 내부 상태 변수
     private Vector2 moveDirection;
-    private bool isFacingRight = true; // 캐릭터가 오른쪽을 보고 있는지 여부 (좌우 반전용)
+    private bool isFacingRight = true;   // 캐릭터가 오른쪽을 보고 있는지 여부 (좌우 반전용)
+    private bool controlsEnabled = true; // 플레이어 조작 가능 상태 플래그
 
     void Start()
     {
         // 필수 컴포넌트 가져오기
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>(); // SpriteRenderer 가져오기
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         // Rigidbody2D 기본 설정 (2D 탑다운 또는 사이드뷰에 적합하게)
         if (rb != null)
         {
-            rb.gravityScale = 0f;        // 중력 사용 안 함 (탑다운의 경우)
+            rb.gravityScale = 0f;        // 중력 사용 안 함
             rb.constraints = RigidbodyConstraints2D.FreezeRotation; // 물리적으로 회전하지 않도록 고정
+        }
+        else
+        {
+            Debug.LogError("PlayerController: Rigidbody2D 컴포넌트가 없습니다!");
         }
 
         if (animator == null)
@@ -40,6 +46,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // 조작이 불가능한 상태면 Update 로직의 입력 처리 부분을 건너뜀
+        if (!controlsEnabled)
+        {
+            // 필요하다면 여기서도 움직임을 멈추고 Idle 애니메이션을 강제할 수 있지만,
+            // SetInputEnabled(false) 호출 시 이미 처리하고 있음.
+            return;
+        }
+
         // --- 1. 입력 처리 ---
         float moveX = Input.GetAxisRaw("Horizontal"); // 좌우 입력 (A, D, <-, ->)
         float moveY = Input.GetAxisRaw("Vertical");   // 상하 입력 (W, S, Up, Down)
@@ -49,8 +63,7 @@ public class PlayerController : MonoBehaviour
         // --- 2. 애니메이션 제어 ---
         if (animator != null)
         {
-            // 이동 벡터의 크기(길이)가 0.1보다 크면 움직이는 것으로 간주
-            if (moveDirection.magnitude > 0.1f)
+            if (moveDirection.magnitude > 0.1f) // 이동 벡터의 크기가 0.1보다 크면 움직이는 것으로 간주
             {
                 animator.SetBool("IsWalking", true);
             }
@@ -61,9 +74,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // --- 3. 캐릭터 방향 전환 (좌우 반전 - 스프라이트 기준) ---
-        // 탑다운 게임에서 캐릭터가 마우스나 특정 방향을 바라보게 하려면 다른 회전 로직이 필요합니다.
-        // 이 코드는 캐릭터가 왼쪽 또는 오른쪽으로 이동할 때 스프라이트를 반전시킵니다.
-        if (spriteRenderer != null) // spriteRenderer가 있을 때만 실행
+        if (spriteRenderer != null)
         {
             if (moveX > 0 && !isFacingRight) // 오른쪽으로 이동하는데 왼쪽을 보고 있다면
             {
@@ -78,9 +89,18 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // 조작이 불가능한 상태면 물리 업데이트도 건너뛸 수 있지만,
+        // 보통 velocity를 0으로 설정해두면 FixedUpdate는 실행되어도 괜찮습니다.
+        // 만약 SetInputEnabled(false)에서 rb.velocity = Vector2.zero를 호출했다면,
+        // controlsEnabled가 false일 때 여기서 추가로 멈출 필요는 없습니다.
+        if (!controlsEnabled && rb != null) // 확실히 멈추고 싶다면
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
+
         // --- 4. 물리 기반 이동 ---
-        // Rigidbody를 사용한 이동은 FixedUpdate에서 처리하는 것이 물리적으로 더 안정적입니다.
-        if (rb != null)
+        if (rb != null && controlsEnabled) // Rigidbody가 있고 조작 가능할 때만
         {
             rb.velocity = moveDirection * moveSpeed;
         }
@@ -89,9 +109,7 @@ public class PlayerController : MonoBehaviour
     // 캐릭터 좌우 반전 함수
     void Flip()
     {
-        isFacingRight = !isFacingRight; // 현재 방향 상태 반전
-        // transform.localScale = new Vector3(transform.localScale.x * -1, transform.localScale.y, transform.localScale.z);
-        // 위 방법 대신 SpriteRenderer의 flipX를 사용하는 것이 다른 Scale 문제(자식 오브젝트 등)를 피하기에 더 좋습니다.
+        isFacingRight = !isFacingRight;
         if (spriteRenderer != null)
         {
             spriteRenderer.flipX = !isFacingRight; // isFacingRight가 true면 flipX는 false (원본), false면 flipX는 true (반전)
@@ -121,16 +139,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // --- (선택 사항) 컷신 등에서 플레이어 조작을 제어하기 위한 함수 ---
-    public void SetInputEnabled(bool enabled)
+    // --- 플레이어 조작 가능/불가능 상태를 설정하는 public 함수 ---
+    public void SetInputEnabled(bool status)
     {
-        // 이 PlayerController 스크립트 자체를 활성화/비활성화하여 Update, FixedUpdate 실행을 제어
-        this.enabled = enabled;
+        controlsEnabled = status;
 
-        if (!enabled) // 조작이 비활성화되면
+        // 조작이 비활성화되면 즉시 움직임을 멈추고 Idle 애니메이션으로 전환
+        if (!controlsEnabled)
         {
-            if (rb != null) rb.velocity = Vector2.zero; // 물리적 움직임 정지
-            if (animator != null) animator.SetBool("IsWalking", false); // 애니메이션을 Idle 상태로
+            moveDirection = Vector2.zero; // 다음 FixedUpdate에서 속도가 0이 되도록 입력 방향 초기화
+            if (rb != null)
+            {
+                rb.velocity = Vector2.zero; // 즉시 물리적 움직임 정지
+            }
+            if (animator != null)
+            {
+                animator.SetBool("IsWalking", false); // 애니메이션을 Idle 상태로
+            }
         }
     }
 }
