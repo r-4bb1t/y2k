@@ -36,7 +36,7 @@ public class ZombieAI : MonoBehaviour
         GetComponent<Rigidbody2D>().velocity = direction * moveSpeed; // 3D: GetComponent<Rigidbody>().velocity
 
         // (선택 사항) 플레이어를 바라보도록 회전
-        // float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f; // 2D Sprite 기준
-        // transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; // 2D Sprite 기준
+         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 }
