@@ -1318,7 +1318,7 @@ GameObject:
   - component: {fileID: 1053769912}
   - component: {fileID: 1053769916}
   - component: {fileID: 1053769917}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1799,10 +1799,10 @@ MonoBehaviour:
   rayCount: 30
   targetMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
 --- !u!1001 &1581671710
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2266,7 +2266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6644969796972689904, guid: 68f9acc7b01b9d04e9bb263c66c11f7b, type: 3}
       propertyPath: m_TagString
-      value: TurnLeft
+      value: TurnRight
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

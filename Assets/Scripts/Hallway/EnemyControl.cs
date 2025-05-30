@@ -56,25 +56,6 @@ public class EnemyControl : MonoBehaviour
         return rotation * transform.up;
     }
 
-    void OnDrawGizmosSelected()
-    {
-        if (!Application.isPlaying) return;
-
-        float angleStep = viewAngle / rayCount;
-        float startAngle = -viewAngle / 2f;
-
-        for (int i = 0; i <= rayCount; i++)
-        {
-            float angle = startAngle + angleStep * i;
-            Vector2 dir = DirFromAngle(angle);  // 수정된 함수
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, (Vector2)transform.position + dir * viewRadius);
-        }
-
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, viewRadius);
-    }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         string tag = collision.tag;
@@ -128,9 +109,4 @@ public class EnemyControl : MonoBehaviour
         isRotating = false;
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, (Vector2)transform.position + moveDirection.normalized);
-    }
 }
