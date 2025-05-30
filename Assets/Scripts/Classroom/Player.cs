@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
     IEnumerator DelayedFadeOut()
     {
         yield return new WaitForSeconds(0.5f);
-        FadeManager.Instance.FadeOutAndReload();
+        SceneManager.LoadScene("GameOver");
     }
 
 
