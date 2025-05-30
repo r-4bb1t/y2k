@@ -1,55 +1,40 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Teacher : MonoBehaviour
 {
     public bool isWatching = false;
-    public Sprite defaultSprite;
-    public Sprite watchingSprite;
-    public Sprite surprisedSprite;
-    private SpriteRenderer spriteRenderer;
-    private float nextChangeTime;
-    private float changeInterval;
 
+    private Animator animator;
+
+    [SerializeField] private float minSleepTime = 2f;
+    [SerializeField] private float maxSleepTime = 5f;
     [SerializeField] private float warningTime = 1f;
-    [SerializeField] private float minChangeTime = 2f;
-    [SerializeField] private float maxChangeTime = 5f;
     [SerializeField] private float minWatchTime = 0.5f;
     [SerializeField] private float maxWatchTime = 3f;
 
-    void Start()
+    private void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        SetNextChangeTime();
+        animator = GetComponentInChildren<Animator>();
+        StartCoroutine(StateLoop());
     }
 
-    void Update()
+    private IEnumerator StateLoop()
     {
-        if (Time.time >= nextChangeTime - warningTime && spriteRenderer.sprite != surprisedSprite)
+        while (true)
         {
-            spriteRenderer.sprite = surprisedSprite;
-        }
-        else if (Time.time >= nextChangeTime)
-        {
+            animator.SetInteger("status", 0);
+            isWatching = false;
+            float sleepTime = Random.Range(minSleepTime, maxSleepTime);
+            yield return new WaitForSeconds(sleepTime);
+
+            animator.SetInteger("status", 1);
+            yield return new WaitForSeconds(warningTime);
+
+            animator.SetInteger("status", 2);
             isWatching = true;
-            spriteRenderer.sprite = watchingSprite;
-            StartCoroutine(ResetWatching());
-            SetNextChangeTime();
+            float watchTime = Random.Range(minWatchTime, maxWatchTime);
+            yield return new WaitForSeconds(watchTime);
         }
-    }
-
-    void SetNextChangeTime()
-    {
-        changeInterval = Random.Range(minChangeTime, maxChangeTime);
-        nextChangeTime = Time.time + changeInterval;
-    }
-
-    IEnumerator ResetWatching()
-    {
-        changeInterval = Random.Range(minWatchTime, maxWatchTime);
-        yield return new WaitForSeconds(changeInterval);
-        isWatching = false;
-        spriteRenderer.sprite = defaultSprite;
     }
 }

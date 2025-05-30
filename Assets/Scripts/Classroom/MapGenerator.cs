@@ -12,8 +12,11 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private float maxY = 4f;
     [SerializeField] private float gridSpacing = 2f;
 
+    private Player player;
+
     void Start()
     {
+        player = FindObjectOfType<Player>();
         GenerateDesks();
     }
 
@@ -36,12 +39,14 @@ public class MapGenerator : MonoBehaviour
 
         Shuffle(gridPositions);
 
-        for (int i = 0; i < Mathf.Min(numberOfDesks, gridPositions.Count); i++)
+        Vector3 playerPosition = new Vector3(player.transform.position.x, player.transform.position.y + 1f, -10f);
+        Instantiate(deskPrefab, playerPosition, Quaternion.identity);
+
+        for (int i = 0; i < Mathf.Min(numberOfDesks - 1, gridPositions.Count); i++)
         {
             Instantiate(deskPrefab, gridPositions[i], Quaternion.identity);
         }
     }
-
 
     void Shuffle<T>(List<T> list)
     {
