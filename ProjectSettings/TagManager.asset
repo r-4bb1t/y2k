@@ -7,10 +7,9 @@ TagManager:
   - Hidable
   - Cover
   - Zombie
-  - Left
-  - Right
-  - Up
-  - Down
+  - TurnRight
+  - TurnLeft
+  - TurnBack
   layers:
   - Default
   - TransparentFX
