@@ -1746,6 +1746,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   viewAngle: 90
   viewRadius: 5
+  moveSpeed: 2
+  rotateDuration: 0.5
   rayCount: 30
   targetMask:
     serializedVersion: 2

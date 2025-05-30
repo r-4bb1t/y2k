@@ -26,23 +26,19 @@ public class EnemyControl : MonoBehaviour
     {
         Vector2 origin = transform.position;
         float angleStep = viewAngle / rayCount;
-        float startAngle = transform.eulerAngles.z - viewAngle / 2f;
+        float startAngle = -viewAngle / 2f;
 
         for (int i = 0; i <= rayCount; i++)
         {
             float angle = startAngle + angleStep * i;
-            Vector2 dir = DirFromAngle(angle, true);
+            Vector2 dir = DirFromAngle(angle);  // 수정된 함수
             RaycastHit2D hit = Physics2D.Raycast(origin, dir, viewRadius, targetMask | obstacleMask);
 
-            if (hit)
+            if (hit && ((1 << hit.collider.gameObject.layer) & targetMask) != 0)
             {
-                if (((1 << hit.collider.gameObject.layer) & targetMask) != 0)
-                {
-                    Debug.Log("플레이어 감지됨!");
-                }
+                Debug.Log("플레이어 감지됨!");
             }
 
-            // 시각화용
             Debug.DrawRay(origin, dir * viewRadius, Color.yellow);
         }
 
@@ -53,31 +49,28 @@ public class EnemyControl : MonoBehaviour
     }
 
     // angle은 로컬 회전 기준. global=true일 경우 적의 현재 방향을 반영.
-    Vector2 DirFromAngle(float angleInDegrees, bool global)
+    Vector2 DirFromAngle(float angleInDegrees)
     {
-        if (!global)
-            angleInDegrees += transform.eulerAngles.z;
-
-        float rad = angleInDegrees * Mathf.Deg2Rad;
-        return new Vector2(Mathf.Cos(rad), Mathf.Sin(rad));
+        // 현재 바라보는 방향(transform.up)을 기준으로 회전
+        Quaternion rotation = Quaternion.AngleAxis(angleInDegrees, Vector3.forward);
+        return rotation * transform.up;
     }
 
     void OnDrawGizmosSelected()
     {
-        if (!Application.isPlaying) return; // 실행 중이 아닐 땐 무시
+        if (!Application.isPlaying) return;
 
         float angleStep = viewAngle / rayCount;
-        float startAngle = transform.eulerAngles.z - viewAngle / 2f;
+        float startAngle = -viewAngle / 2f;
 
         for (int i = 0; i <= rayCount; i++)
         {
             float angle = startAngle + angleStep * i;
-            Vector2 dir = DirFromAngle(angle, true);
+            Vector2 dir = DirFromAngle(angle);  // 수정된 함수
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, (Vector2)transform.position + dir * viewRadius);
         }
 
-        // 반경 원 그리기
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, viewRadius);
     }
