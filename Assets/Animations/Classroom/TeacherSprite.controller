@@ -83,7 +83,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TeacherWatching
-  m_Speed: 0.2
+  m_Speed: 0.05
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -1940750743748782933}
@@ -110,7 +110,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TeacherWarning
-  m_Speed: 0.2
+  m_Speed: 0.05
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4334211958634041297}
@@ -218,7 +218,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TeacherSleeping
-  m_Speed: 0.2
+  m_Speed: 0.05
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -8356724131196863661}

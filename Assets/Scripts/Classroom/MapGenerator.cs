@@ -17,7 +17,7 @@ public class MapGenerator : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
-        GenerateDesks();
+        // GenerateDesks();
     }
 
     void GenerateDesks()
@@ -37,9 +37,12 @@ public class MapGenerator : MonoBehaviour
             yIndex++;
         }
 
+        Vector3 playerPosition = new Vector3(player.transform.position.x, player.transform.position.y + 1f, -10f);
+
+        gridPositions.RemoveAll(pos => Vector3.Distance(pos, playerPosition) < 0.1f);
+
         Shuffle(gridPositions);
 
-        Vector3 playerPosition = new Vector3(player.transform.position.x, player.transform.position.y + 1f, -10f);
         Instantiate(deskPrefab, playerPosition, Quaternion.identity);
 
         for (int i = 0; i < Mathf.Min(numberOfDesks - 1, gridPositions.Count); i++)
@@ -47,6 +50,7 @@ public class MapGenerator : MonoBehaviour
             Instantiate(deskPrefab, gridPositions[i], Quaternion.identity);
         }
     }
+
 
     void Shuffle<T>(List<T> list)
     {
