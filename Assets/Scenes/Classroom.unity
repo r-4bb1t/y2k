@@ -896,10 +896,10 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: -0.05382639}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -910,7 +910,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 1.1076528}
   m_EdgeRadius: 0
 --- !u!1001 &708086624
 PrefabInstance:
@@ -3011,8 +3011,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isWatching: 0
-  minSleepTime: 2
-  maxSleepTime: 5
+  minSleepTime: 1
+  maxSleepTime: 4
   warningTime: 1
   minWatchTime: 1
   maxWatchTime: 3
@@ -3290,6 +3290,10 @@ PrefabInstance:
     - target: {fileID: 13945855738010660, guid: 4fc8e917daa7bef40bb9f616373d8d98, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 13945855738010660, guid: 4fc8e917daa7bef40bb9f616373d8d98, type: 3}
+      propertyPath: m_TagString
+      value: Door
       objectReference: {fileID: 0}
     - target: {fileID: 3291865761649686612, guid: 4fc8e917daa7bef40bb9f616373d8d98, type: 3}
       propertyPath: m_LocalPosition.x

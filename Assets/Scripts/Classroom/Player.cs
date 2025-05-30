@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
-    private float moveSpeed = 5f;
+    private float moveSpeed = 3f;
     private Rigidbody2D rb;
     private Teacher teacher;
     public bool isGameOver { get; private set; } = false;
