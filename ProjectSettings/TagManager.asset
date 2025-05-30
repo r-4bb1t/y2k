@@ -5,6 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Hidable
+  - Cover
+  - Zombie
+  - Left
+  - Right
+  - Up
+  - Down
   layers:
   - Default
   - TransparentFX
