@@ -14,12 +14,14 @@ public class PlayerControl : MonoBehaviour
     Vector2 moveDir = Vector2.zero;
     SpriteRenderer playerRenderer;
     Rigidbody2D playerRB;
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         playerRB = GetComponent<Rigidbody2D>();
         playerRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -48,6 +50,15 @@ public class PlayerControl : MonoBehaviour
         else if (verticalInput < 0)
         {
             transform.GetChild(0).gameObject.transform.localScale = new Vector3(1, -1, 1);
+        }
+
+        if (horizontalInput == 0 && verticalInput == 0)
+        {
+            animator.SetBool("isMoving", false);
+        }
+        else
+        {
+            animator.SetBool("isMoving", true);
         }
 
         playerRB.velocity = moveDir * moveSpeed;

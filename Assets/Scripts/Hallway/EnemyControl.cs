@@ -44,7 +44,7 @@ public class EnemyControl : MonoBehaviour
 
         if (!isRotating)
         {
-            transform.Translate(moveDirection * moveSpeed * Time.deltaTime);
+            transform.position += (Vector3)(moveDirection.normalized * moveSpeed * Time.deltaTime);
         }
     }
 
@@ -56,86 +56,57 @@ public class EnemyControl : MonoBehaviour
         return rotation * transform.up;
     }
 
-    void OnDrawGizmosSelected()
-    {
-        if (!Application.isPlaying) return;
-
-        float angleStep = viewAngle / rayCount;
-        float startAngle = -viewAngle / 2f;
-
-        for (int i = 0; i <= rayCount; i++)
-        {
-            float angle = startAngle + angleStep * i;
-            Vector2 dir = DirFromAngle(angle);  // 수정된 함수
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, (Vector2)transform.position + dir * viewRadius);
-        }
-
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, viewRadius);
-    }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         string tag = collision.tag;
 
-        // 도착한 Waypoint의 태그에 따라 방향 지정
-        Vector2 targetDir = moveDirection;
         float targetAngle = transform.eulerAngles.z;
 
         switch (tag)
         {
-            case "Right":
-                targetDir = Vector2.right;
-                targetAngle = 0f;
+            case "TurnRight":
+                targetAngle += -90f; // Z축은 시계방향이 음수
                 break;
-            case "Left":
-                targetDir = Vector2.left;
-                targetAngle = 180f;
+            case "TurnLeft":
+                targetAngle += 90f;
                 break;
-            case "Up":
-                targetDir = Vector2.up;
-                targetAngle = 90f;
-                break;
-            case "Down":
-                targetDir = Vector2.down;
-                targetAngle = -90f;
+            case "TurnBack":
+                targetAngle += 180f;
                 break;
             default:
-                return; // 무효 태그일 경우 무시
+                return; // 회전 명령이 없는 경우 무시
         }
 
-        // 현재 회전 중이 아니라면 회전 코루틴 시작
+        // 회전 중이 아니면 회전 시작
         if (!isRotating)
         {
-            StartCoroutine(RotateTowards(targetAngle, targetDir));
+            StartCoroutine(RotateTowards(targetAngle));
         }
     }
 
-    IEnumerator RotateTowards(float targetZ, Vector2 newDirection)
+    IEnumerator RotateTowards(float targetZ)
     {
         isRotating = true;
 
         float elapsed = 0f;
         float startZ = transform.eulerAngles.z;
-
-        // Unity의 Z축 각도는 0~360도이므로 보간을 위해 정리
         float angleDiff = Mathf.DeltaAngle(startZ, targetZ);
 
         while (elapsed < rotateDuration)
         {
             elapsed += Time.deltaTime;
             float t = elapsed / rotateDuration;
-
             float currentZ = startZ + angleDiff * t;
             transform.rotation = Quaternion.Euler(0f, 0f, currentZ);
-
             yield return null;
         }
 
-        // 정확히 정렬
         transform.rotation = Quaternion.Euler(0f, 0f, targetZ);
-        moveDirection = newDirection;
+
+        //바라보는 방향(transform.up)을 기준으로 이동 방향 재설정
+        moveDirection = transform.up;
+
         isRotating = false;
     }
+
 }
