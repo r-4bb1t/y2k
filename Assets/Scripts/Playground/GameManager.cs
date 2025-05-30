@@ -1,9 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+// using UnityEngine.UI; // TextMeshPro를 주로 사용하면 이 줄은 필요 없을 수 있습니다.
+using TMPro;          // TextMeshPro 사용
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
-// using System.Collections; // 코루틴을 사용하지 않으므로 이 줄은 없어도 됩니다.
+using UnityEngine.SceneManagement; // 씬 관리를 위해 필수!
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,21 +16,22 @@ public class GameManager : MonoBehaviour
     [Header("UI Elements")]
     public TextMeshProUGUI timerText;
     public GameObject gameOverPanel;
-    public GameObject endingScreenPanel;    // 최종 탈출 성공 시 보여줄 패널
-    public TextMeshProUGUI endingMessageText;  // 엔딩 패널에 표시될 메시지 텍스트
-    // public TextMeshProUGUI introSubtitleText; // 컷신용이었으므로 제거 또는 주석 처리
-    // public GameObject introSubtitlePanel;    // 컷신용이었으므로 제거 또는 주석 처리
+    // public GameObject endingScreenPanel;    // 엔딩 씬으로 대체되므로 제거
+    // public TextMeshProUGUI endingMessageText;  // 엔딩 씬으로 대체되므로 제거
+    public TextMeshProUGUI introSubtitleText;
+    public GameObject introSubtitlePanel;
 
     [Header("Level Elements")]
     public SpriteRenderer doorSpriteRenderer;
     public Sprite doorOpenSprite;
     public Sprite doorClosedSprite;
     public GameObject exitTriggerZone;
+    public Collider2D doorCollider; // ★ 새로 추가: 문의 Collider2D를 연결할 변수
 
     [Header("Game Settings")]
     public float spawnInterval = 10f;
     public float survivalTimeGoal = 60f;
-    public float minSpawnDistanceToPlayer = 14f;
+    public float minSpawnDistanceToPlayer = 5f;
     public float timeToSpawnChargingZombies = 30f;
     [Range(0f, 1f)]
     public float chargingZombieSpawnChance = 0.1f;
@@ -38,8 +39,11 @@ public class GameManager : MonoBehaviour
     [Range(0f, 1f)]
     public float randomZombieSpawnChance = 0.3f;
 
-    // [Header("Cutscene Settings")] // 컷신 관련 변수들 제거 또는 주석 처리
-    // public Transform playerCharacterTransform; // 대신 playerTransformForSpawning 사용
+    [Header("Scene Names")]
+    public string endingSceneName = "YourEndingSceneNameHere"; // ★ 중요: 실제 엔딩 씬 이름으로 변경해주세요!
+
+    // Cutscene Settings (컷신을 사용하지 않기로 했으므로 관련 변수 제거 또는 주석 처리)
+    // public Transform playerCharacterTransform;
     // public Transform gatePositionTransform;
     // public float cutsceneMoveSpeed = 4f;
 
@@ -48,57 +52,49 @@ public class GameManager : MonoBehaviour
     private float currentSurvivalTime;
     private bool isGameOver = false;
     public bool isGameWon = false;
-    private Transform playerTransformForSpawning; // 좀비 스폰 시 플레이어 위치 참조용
-    // private bool isCutscenePlaying = true; // 컷신 플래그 제거
-    private bool finalEscapeTriggered = false;
-    // private PlayerController playerControllerScript; // 컷신에서 플레이어 제어용이었으므로 일단 제거
+    private Transform playerTransformForSpawning;
+    // private bool isCutscenePlaying = true; // 컷신 사용 안 함
+    private bool finalEscapeTriggered = false; // 최종 탈출(씬 로드)이 한 번만 실행되도록
+    // private PlayerController playerControllerScript; // 컷신용이었으므로 일단 제거
 
     void Start()
     {
-        // 플레이어 참조 설정 (주로 좀비 스폰 시 거리 계산용)
         GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
         if (playerObject != null)
         {
             playerTransformForSpawning = playerObject.transform;
-            // playerControllerScript = playerObject.GetComponent<PlayerController>(); // 필요하다면 유지
+            // playerControllerScript = playerObject.GetComponent<PlayerController>();
         }
         else
         {
             Debug.LogWarning("GameManager: 'Player' 태그를 가진 오브젝트를 찾을 수 없습니다.");
         }
 
-        // 게임 상태 초기화
         isGameOver = false;
         isGameWon = false;
         finalEscapeTriggered = false;
-        Time.timeScale = 1f; // 게임 시간 정상 속도
+        Time.timeScale = 1f;
 
-        // UI 패널들 초기 비활성화
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
-        if (endingScreenPanel != null) endingScreenPanel.SetActive(false);
-        // if (introSubtitlePanel != null) introSubtitlePanel.SetActive(false); // 컷신 UI 제거
+        // if (endingScreenPanel != null) endingScreenPanel.SetActive(false); // 제거됨
+        if (introSubtitlePanel != null) introSubtitlePanel.SetActive(false); // 컷신 UI를 인트로에 계속 쓰신다면 유지
         if (exitTriggerZone != null) exitTriggerZone.SetActive(false);
 
-        // 문 상태 초기화
         if (doorSpriteRenderer != null && doorClosedSprite != null)
         {
             doorSpriteRenderer.sprite = doorClosedSprite;
         }
 
-        // 컷신이 없으므로 게임 관련 타이머 즉시 초기화 및 시작
+        // isCutscenePlaying = false; // 컷신 없으므로 바로 게임 시작 상태
         currentSurvivalTime = 0f;
-        spawnTimer = 0f; // 첫 좀비 바로 스폰 (또는 spawnInterval 값으로 설정)
+        spawnTimer = 0f;
         UpdateTimerUI();
-
-        // 플레이어 컨트롤은 기본적으로 활성화된 상태로 시작한다고 가정
-        // if (playerControllerScript != null) playerControllerScript.SetInputEnabled(true);
     }
 
     void Update()
     {
-        // 게임이 완전히 끝난 상태 (게임오버 또는 최종 탈출 성공)일 때 스페이스바로 재시작
-        bool canRestart = isGameOver || finalEscapeTriggered;
-        if (canRestart)
+        // 게임 오버 상태일 때만 스페이스바로 재시작 (엔딩씬으로 넘어가면 이 GameManager는 파괴됨)
+        if (isGameOver)
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -107,15 +103,15 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        // (isCutscenePlaying 체크 제거됨)
+        // isCutscenePlaying 체크 제거
 
-        // isGameWon 상태 (60초 생존, 좀비 제거, 문 열림)에서는 플레이어가 출구로 이동하기를 기다림
-        if (isGameWon)
+        if (isGameWon || finalEscapeTriggered) // 60초 생존했거나 이미 탈출씬으로 넘어갔다면
         {
+            // 플레이어가 출구로 이동하기를 기다리거나, 이미 씬 전환됨.
+            // 이 GameManager는 더 이상 게임 로직(타이머, 스폰)을 진행하지 않음.
             return;
         }
 
-        // --- 이하 일반 게임 진행 로직 ---
         currentSurvivalTime += Time.deltaTime;
         UpdateTimerUI();
 
@@ -133,13 +129,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // PlayOpeningCutscene() 코루틴 전체 제거
-    // ShowSubtitleForCutscene() 함수 전체 제거
+    // PlayOpeningCutscene() 코루틴 및 ShowSubtitleForCutscene() 관련 함수들은 제거했다고 가정합니다.
+    // 만약 간단한 인트로 메시지를 사용하고 싶다면 ShowSubtitleForCutscene() 등은 유지하셔도 됩니다.
 
     void SpawnZombie()
     {
         if (spawnPoints.Count == 0 || baseZombiePrefab == null) return;
-
         List<Transform> availableSpawnPoints = new List<Transform>();
         if (playerTransformForSpawning != null)
         {
@@ -165,7 +160,6 @@ public class GameManager : MonoBehaviour
         {
             zombieToSpawn = randomZombiePrefab;
         }
-
         Instantiate(zombieToSpawn, selectedSpawnPoint.position, selectedSpawnPoint.rotation);
     }
 
@@ -178,11 +172,13 @@ public class GameManager : MonoBehaviour
                 timerText.text = "문이 열렸다! 탈출하라!";
                 return;
             }
+            // finalEscapeTriggered 나 isGameOver 시 타이머 숨기는 로직은 PlayerReachedExit/GameOver에서 처리하거나 여기서도 가능
             if (finalEscapeTriggered || isGameOver)
             {
-                // timerText.gameObject.SetActive(false); // 선택사항: 게임 끝나면 타이머 숨기기
+                // timerText.gameObject.SetActive(false); // 필요시 타이머 숨김
                 return;
             }
+
 
             float timeLeft = survivalTimeGoal - currentSurvivalTime;
             int displayTime = Mathf.CeilToInt(Mathf.Max(0f, timeLeft));
@@ -199,6 +195,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("게임 오버!");
     }
 
+    // GameManager.cs
     public void GameWin() // 60초 생존 시
     {
         if (isGameWon || isGameOver || finalEscapeTriggered) return;
@@ -206,19 +203,33 @@ public class GameManager : MonoBehaviour
         isGameWon = true;
         Debug.Log("목표 시간(" + survivalTimeGoal + "초) 생존! 문이 열립니다. 좀비를 제거합니다.");
 
+        // 1. 문 열기 (스프라이트 변경)
         if (doorSpriteRenderer != null && doorOpenSprite != null)
         {
             doorSpriteRenderer.sprite = doorOpenSprite;
         }
 
-        GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie");
+        // ★ 2. 문의 콜라이더 비활성화 ★
+        if (doorCollider != null)
+        {
+            doorCollider.enabled = false; // 콜라이더를 비활성화하여 통과 가능하게 만듦
+            Debug.Log("문 콜라이더가 비활성화되었습니다.");
+        }
+        else
+        {
+            Debug.LogWarning("GameManager: Door Collider가 연결되지 않았습니다.");
+        }
+
+        // 3. 모든 좀비 제거
+        GameObject[] zombies = GameObject.FindGameObjectsWithTag("Zombie"); // 좀비 태그 확인!
         foreach (GameObject zombie in zombies)
         {
             Destroy(zombie);
         }
         Debug.Log(zombies.Length + " 마리의 좀비를 모두 제거했습니다.");
-        UpdateTimerUI();
+        UpdateTimerUI(); // "문이 열렸다!" 메시지 등으로 변경
 
+        // 4. 출구 트리거 활성화
         if (exitTriggerZone != null)
         {
             exitTriggerZone.SetActive(true);
@@ -226,25 +237,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void PlayerReachedExit() // 출구 도달 시
+    // 플레이어가 열린 문 (ExitTriggerZone)에 도달했을 때 호출
+    public void PlayerReachedExit()
     {
-        if (!isGameWon || finalEscapeTriggered) return;
+        if (!isGameWon || finalEscapeTriggered) return; // 조건 미달이거나 이미 탈출 처리됐으면 실행 안함
 
-        finalEscapeTriggered = true;
-        Time.timeScale = 0f;
-        Debug.Log("플레이어가 출구에 도달했습니다. 탈출 성공!");
+        finalEscapeTriggered = true; // 최종 탈출 처리됨
+        Debug.Log("플레이어가 출구에 도달했습니다. 엔딩 씬으로 이동합니다...");
 
-        if (endingScreenPanel != null)
+        // 새 씬을 로드하기 전에 Time.timeScale을 1로 되돌리는 것이 좋습니다.
+        // 특히 엔딩 씬에 애니메이션이나 다른 시간 기반 요소가 있다면 더욱 그렇습니다.
+        Time.timeScale = 1f;
+
+        if (string.IsNullOrEmpty(endingSceneName) || endingSceneName == "YourEndingSceneNameHere")
         {
-            if (endingMessageText != null)
-            {
-                endingMessageText.text = "탈출 성공!";
-            }
-            endingScreenPanel.SetActive(true);
+            Debug.LogError("엔딩 씬 이름(endingSceneName)이 GameManager에 설정되지 않았습니다!");
+            // 엔딩 씬 이름이 없으면, 임시로 게임 오버 패널 같은 것을 보여주거나 아무것도 안 할 수 있습니다.
+            // 여기서는 간단히 로그만 남기고, 필요하다면 다른 UI(예: 임시 클리어 텍스트)를 띄웁니다.
+            if (timerText != null) timerText.text = "탈출 성공! (엔딩씬 설정 필요)";
+            return;
         }
-
-        if (timerText != null) timerText.gameObject.SetActive(false); // 타이머 숨김
-        if (gameOverPanel != null) gameOverPanel.SetActive(false); // 게임오버 패널 혹시 떠있으면 숨김
+        SceneManager.LoadScene(endingSceneName); // 엔딩 씬 로드
     }
 
     public void RestartGame()
