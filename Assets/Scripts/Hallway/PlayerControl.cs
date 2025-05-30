@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -69,6 +70,7 @@ public class PlayerControl : MonoBehaviour
         {
             Debug.Log("탈출!");
             //다음 스테이지로 진행
+            SceneManager.LoadScene("Playground");
         }
     }
 

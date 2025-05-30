@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyControl : MonoBehaviour
 {
@@ -47,6 +48,7 @@ public class EnemyControl : MonoBehaviour
                 {
                     //게임 오버 로직
                     Debug.Log("게임 오버!");
+                    SceneManager.LoadScene("GameOver");
                 }
             }
 
