@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb;
     private Teacher teacher;
     public bool isGameOver { get; private set; } = false;
+    public bool isGameClear { get; private set; } = false;
 
 
     private Animator animator;
@@ -59,7 +60,7 @@ public class Player : MonoBehaviour
 
     void GameOver()
     {
-        if (isGameOver) return;
+        if (isGameOver || isGameClear) return;
         isGameOver = true;
 
         rb.velocity = Vector2.zero;
@@ -94,6 +95,8 @@ public class Player : MonoBehaviour
 
     void GameClear()
     {
+        if (isGameOver || isGameClear) return;
+        isGameClear = true;
         Debug.Log("게임 클리어!");
     }
 }
