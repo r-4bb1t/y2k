@@ -54,7 +54,7 @@ public class Player : MonoBehaviour
 
     bool IsHiddenBehindCover()
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 5f, LayerMask.GetMask("Cover"));
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 10f, LayerMask.GetMask("Cover"));
         return hit.collider != null;
     }
 

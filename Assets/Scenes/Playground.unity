@@ -16339,8 +16339,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4279242983
+  m_fontColor: {r: 0.9056604, g: 0.06407974, b: 0.06407974, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -17025,6 +17025,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7858831537987955854, guid: 9a25a35fc6464ce41888542b0819c014,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.43515122
+      objectReference: {fileID: 0}
+    - target: {fileID: 7858831537987955854, guid: 9a25a35fc6464ce41888542b0819c014,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.06484878
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4162662950251789842, guid: 9a25a35fc6464ce41888542b0819c014, type: 3}

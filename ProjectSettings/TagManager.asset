@@ -3,7 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Cover
+  - Door
+  - Zombie
+  - Hidable
+  - TurnRight
+  - TurnBack
+  - TurnLeft
   layers:
   - Default
   - TransparentFX
@@ -17,7 +24,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Cover
   - 
   - 
   - 
