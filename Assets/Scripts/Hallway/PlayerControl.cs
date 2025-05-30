@@ -9,6 +9,7 @@ public class PlayerControl : MonoBehaviour
     float verticalInput;
 
     public bool isHidden = false;
+    public bool detected = false;
 
     Vector2 moveDir = Vector2.zero;
     SpriteRenderer playerRenderer;

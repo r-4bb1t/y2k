@@ -1122,7 +1122,7 @@ GameObject:
   - component: {fileID: 1053769916}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1281,6 +1281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   isHidden: 0
+  detected: 0
 --- !u!1001 &1151909053
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1423,6 +1424,7 @@ GameObject:
   - component: {fileID: 1228217949}
   - component: {fileID: 1228217948}
   - component: {fileID: 1228217947}
+  - component: {fileID: 1228217951}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -1559,6 +1561,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1228217951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1228217946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5478b2fdbce02e6408b49ab70eda7e60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewAngle: 90
+  viewRadius: 5
+  rayCount: 30
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1001 &1581671710
 PrefabInstance:
   m_ObjectHideFlags: 0
