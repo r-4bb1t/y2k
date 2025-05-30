@@ -158,7 +158,7 @@ public class GameManager : MonoBehaviour
         {
             if (isGameWon && !finalEscapeTriggered)
             {
-                timerText.text = "문이 열렸다! 탈출하라!";
+                timerText.text = "Door opened! Escape!!!";
                 return;
             }
             // finalEscapeTriggered 나 isGameOver 시 타이머 숨기는 로직은 PlayerReachedExit/GameOver에서 처리하거나 여기서도 가능
