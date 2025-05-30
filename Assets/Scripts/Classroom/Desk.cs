@@ -15,14 +15,6 @@ public class Desk : MonoBehaviour
             sr.sprite = Resources.Load<Sprite>(selectedSprite);
         }
     }
-
-    // void LateUpdate()
-    // {
-    //     if (sr != null)
-    //     {
-    //         sr.sortingOrder = 10 - (int)(transform.position.y);
-    //     }
-    // }
     void Update()
     {
 
