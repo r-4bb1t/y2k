@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -9,10 +13,16 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb;
     private Teacher teacher;
 
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         teacher = FindObjectOfType<Teacher>();
+
+        animator = GetComponentInChildren<Animator>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     void Update()
@@ -22,12 +32,20 @@ public class Player : MonoBehaviour
 
         Vector2 movement = new Vector2(moveX, moveY).normalized;
 
-        if (teacher.isWatching && (moveX != 0 || moveY != 0))
+        if (animator != null)
         {
-            if (!IsHiddenBehindCover())
+            bool isMoving = movement.magnitude > 0;
+            animator.SetBool("isMoving", isMoving);
+
+            if (spriteRenderer != null && moveX != 0)
             {
-                GameOver();
+                spriteRenderer.flipX = moveX < 0;
             }
+        }
+
+        if (teacher.isWatching && movement.magnitude > 0 && !IsHiddenBehindCover())
+        {
+            GameOver();
         }
 
         rb.velocity = movement * moveSpeed;
@@ -38,7 +56,6 @@ public class Player : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.up, 5f, LayerMask.GetMask("Cover"));
         return hit.collider != null;
     }
-
 
     void GameOver()
     {
