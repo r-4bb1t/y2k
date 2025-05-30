@@ -14,6 +14,7 @@ public class PlayerControl : MonoBehaviour
     Vector2 moveDir = Vector2.zero;
     SpriteRenderer playerRenderer;
     Rigidbody2D playerRB;
+    public GameObject spawnPoint;
     private Animator animator;
 
     // Start is called before the first frame update
@@ -22,6 +23,7 @@ public class PlayerControl : MonoBehaviour
         playerRB = GetComponent<Rigidbody2D>();
         playerRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        transform.position = spawnPoint.transform.position;
     }
 
     // Update is called once per frame
@@ -78,4 +80,5 @@ public class PlayerControl : MonoBehaviour
             playerRenderer.enabled = true;
         }
     }
+
 }
