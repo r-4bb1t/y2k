@@ -9,7 +9,7 @@ public class PlayerControl : MonoBehaviour
     float verticalInput;
 
     public bool isHidden = false;
-    public bool detected = false;
+    public bool isPlayerMoving = false;
 
     Vector2 moveDir = Vector2.zero;
     SpriteRenderer playerRenderer;
@@ -35,30 +35,21 @@ public class PlayerControl : MonoBehaviour
         if (horizontalInput > 0)
         {
             transform.localScale = new Vector3(1, 1, 1);
-            transform.GetChild(0).gameObject.transform.localScale = new Vector3(1, 1, 1);
         }
         else if (horizontalInput < 0)
         {
             transform.localScale = new Vector3(-1, 1, 1);
-            transform.GetChild(0).gameObject.transform.localScale = new Vector3(-1, 1, 1);
-        }
-
-        if (verticalInput > 0)
-        {
-            transform.GetChild(0).gameObject.transform.localScale = new Vector3(1, 1, 1);
-        }
-        else if (verticalInput < 0)
-        {
-            transform.GetChild(0).gameObject.transform.localScale = new Vector3(1, -1, 1);
         }
 
         if (horizontalInput == 0 && verticalInput == 0)
         {
             animator.SetBool("isMoving", false);
+            isPlayerMoving = false;
         }
         else
         {
             animator.SetBool("isMoving", true);
+            isPlayerMoving = true;
         }
 
         playerRB.velocity = moveDir * moveSpeed;

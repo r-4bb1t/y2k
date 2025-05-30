@@ -38,7 +38,7 @@ public class EnemyControl : MonoBehaviour
             if (hit && ((1 << hit.collider.gameObject.layer) & targetMask) != 0)
             {
                 Debug.Log("플레이어 감지됨!");
-                // 게임 오버 로직
+                // 플레이어 isHidden == false || (isHidden == true && isPlayerMoving == true) 일 경우 게임 오버 로직
             }
 
             // 디버그용 레이 (색상 변경)
