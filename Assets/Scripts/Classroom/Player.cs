@@ -97,6 +97,6 @@ public class Player : MonoBehaviour
     {
         if (isGameOver || isGameClear) return;
         isGameClear = true;
-        Debug.Log("게임 클리어!");
+        SceneManager.LoadScene("Hallway");
     }
 }
